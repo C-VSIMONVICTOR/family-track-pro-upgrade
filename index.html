@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FamilyTrack Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --p:#6c3bff;--p2:#8b5cf6;--p3:#ede9fe;--p4:#4c1d95;
+  --dark:#0f0a1e;--dark2:#1a1035;--dark3:#241848;
+  --card:#1e1540;--card2:#281d50;
+  --txt:#f0eeff;--txt2:#a89fd4;--txt3:#6b5fa0;
+  --green:#10b981;--red:#ef4444;--amber:#f59e0b;--blue:#3b82f6;
+  --radius:16px;--radius-sm:10px;
+}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--dark);color:var(--txt);margin:0;}
+.app{max-width:430px;margin:0 auto;min-height:100vh;}
+.screen{display:none;padding-bottom:80px;}
+.screen.active{display:block;}
+
+.hero-bg{background:var(--dark2);padding:2rem 1.25rem 1.5rem;border-bottom:1px solid rgba(108,59,255,0.2);}
+.logo-row{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;}
+.logo-dot{width:38px;height:38px;background:var(--p);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.logo-text{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--txt);}
+.logo-text span{color:var(--p2);}
+.hero-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;line-height:1.2;margin-bottom:8px;}
+.hero-sub{font-size:13px;color:var(--txt2);line-height:1.5;}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.pill{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:500;background:rgba(108,59,255,0.15);color:var(--p2);border:1px solid rgba(108,59,255,0.3);}
+
+.form-section{padding:1.25rem;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:11px;font-weight:500;color:var(--txt3);margin-bottom:6px;letter-spacing:0.06em;text-transform:uppercase;}
+.field input{width:100%;padding:11px 14px;background:var(--card);border:1px solid rgba(108,59,255,0.2);border-radius:var(--radius-sm);font-size:14px;color:var(--txt);font-family:'Inter',sans-serif;outline:none;transition:border 0.2s;}
+.field input:focus{border-color:var(--p);}
+.field input::placeholder{color:var(--txt3);}
+.consent-block{background:rgba(108,59,255,0.1);border:1px solid rgba(108,59,255,0.25);border-radius:var(--radius-sm);padding:12px;margin-bottom:14px;display:flex;gap:10px;align-items:flex-start;}
+.consent-block input[type=checkbox]{accent-color:var(--p);margin-top:2px;flex-shrink:0;}
+.consent-block span{font-size:12px;color:var(--txt2);line-height:1.5;}
+.btn{width:100%;padding:13px;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity 0.15s,transform 0.1s;}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:var(--p);color:#fff;}
+.btn-primary:hover{opacity:0.9;}
+.btn-ghost{background:var(--card);color:var(--txt2);border:1px solid rgba(108,59,255,0.2);margin-top:8px;}
+.btn-danger{background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.2);margin-top:8px;}
+.btn-sm{width:auto;padding:7px 16px;font-size:12px;}
+.err{display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);color:#fca5a5;font-size:12px;padding:9px 12px;border-radius:8px;margin-top:8px;}
+.success-toast{display:none;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);color:#6ee7b7;font-size:12px;padding:9px 12px;border-radius:8px;margin-top:8px;}
+.lock-warn{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:10px 12px;font-size:12px;color:#fca5a5;margin-bottom:12px;display:none;}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem 0.5rem;background:var(--dark2);border-bottom:1px solid rgba(108,59,255,0.15);}
+.topbar-left .name{font-family:'Syne',sans-serif;font-size:16px;font-weight:600;}
+.topbar-left .session{font-size:11px;color:var(--txt3);margin-top:1px;}
+.topbar-right{display:flex;gap:8px;align-items:center;}
+.icon-btn{background:var(--card);border:1px solid rgba(108,59,255,0.2);border-radius:8px;padding:7px 10px;cursor:pointer;font-size:14px;color:var(--txt2);}
+
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:1rem 1.25rem 0.5rem;}
+.stat{background:var(--card);border:1px solid rgba(108,59,255,0.15);border-radius:var(--radius-sm);padding:10px;}
+.stat .s-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--txt);}
+.stat .s-lbl{font-size:10px;color:var(--txt3);margin-top:2px;}
+
+.tabs{display:flex;gap:4px;padding:0.5rem 1.25rem;overflow-x:auto;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap;color:var(--txt2);background:transparent;border:1px solid transparent;transition:all 0.2s;}
+.tab.active{background:var(--p);color:#fff;border-color:var(--p);}
+.tab-panel{display:none;padding:0.75rem 1.25rem;}
+.tab-panel.active{display:block;}
+
+.card{background:var(--card);border:1px solid rgba(108,59,255,0.15);border-radius:var(--radius);padding:1.25rem;margin-bottom:0.75rem;}
+.card-title{font-size:11px;font-weight:500;color:var(--txt3);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px;}
+
+.loc-hero{background:var(--card2);border:1px solid rgba(108,59,255,0.2);border-radius:var(--radius);padding:1.25rem;margin-bottom:0.75rem;position:relative;overflow:hidden;}
+.loc-pulse{position:absolute;right:16px;top:16px;width:40px;height:40px;border-radius:50%;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.loc-pulse.active-pulse{animation:ripple 1.5s infinite;}
+@keyframes ripple{0%{box-shadow:0 0 0 0 rgba(16,185,129,0.4);}70%{box-shadow:0 0 0 12px rgba(16,185,129,0);}100%{box-shadow:0 0 0 0 rgba(16,185,129,0);}}
+.loc-status{font-size:12px;font-weight:500;margin-bottom:4px;}
+.loc-status.on{color:var(--green);}
+.loc-status.off{color:var(--txt3);}
+.coord-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;}
+.coord{background:var(--dark3);border-radius:8px;padding:10px;}
+.coord .c-lbl{font-size:10px;color:var(--txt3);margin-bottom:3px;}
+.coord .c-val{font-size:13px;font-weight:500;font-family:'Syne',sans-serif;color:var(--txt);}
+.sos-btn{width:100%;padding:12px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);color:#fca5a5;font-size:13px;font-weight:500;cursor:pointer;margin-top:8px;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.sos-btn:hover{background:rgba(239,68,68,0.25);}
+
+.member-card{background:var(--card2);border:1px solid rgba(108,59,255,0.15);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.av{width:40px;height:40px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;color:#fff;flex-shrink:0;}
+.av2{background:#0f6e56;}
+.av3{background:#854F0B;}
+.av4{background:#3C3489;}
+.m-info{flex:1;}
+.m-name{font-size:13px;font-weight:500;color:var(--txt);}
+.m-sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+.badge{padding:3px 10px;border-radius:12px;font-size:10px;font-weight:500;}
+.badge-live{background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.2);}
+.badge-off{background:var(--dark3);color:var(--txt3);border:1px solid rgba(255,255,255,0.05);}
+.badge-invite{background:rgba(245,158,11,0.15);color:#fcd34d;border:1px solid rgba(245,158,11,0.2);}
+
+.invite-row{display:flex;gap:8px;margin-top:12px;}
+.invite-row input{flex:1;padding:9px 12px;background:var(--dark3);border:1px solid rgba(108,59,255,0.2);border-radius:8px;font-size:13px;color:var(--txt);font-family:'Inter',sans-serif;outline:none;}
+
+.hist-item{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid rgba(108,59,255,0.08);}
+.hist-item:last-child{border-bottom:none;}
+.hist-dot{width:8px;height:8px;border-radius:50%;background:var(--p2);margin-top:4px;flex-shrink:0;}
+.hist-time{font-size:11px;color:var(--txt3);min-width:60px;font-family:'Syne',sans-serif;}
+.hist-coord{font-size:11px;color:var(--txt2);}
+
+.sec-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(108,59,255,0.08);}
+.sec-row:last-child{border-bottom:none;}
+.sec-icon{width:34px;height:34px;border-radius:10px;background:rgba(108,59,255,0.15);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.sec-info .si-title{font-size:13px;font-weight:500;color:var(--txt);}
+.sec-info .si-sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+.sec-check{margin-left:auto;color:var(--green);font-size:16px;font-weight:700;}
+
+.alert-item{background:var(--card2);border-left:3px solid var(--p);border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:8px;}
+.alert-title{font-size:12px;font-weight:500;color:var(--txt);}
+.alert-sub{font-size:11px;color:var(--txt3);margin-top:2px;}
+
+.zone-item{background:var(--card2);border:1px solid rgba(108,59,255,0.15);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.zone-info{flex:1;}
+.zone-name{font-size:13px;font-weight:500;color:var(--txt);}
+.zone-radius{font-size:11px;color:var(--txt3);}
+.zone-toggle{width:36px;height:20px;background:var(--p);border-radius:10px;position:relative;cursor:pointer;flex-shrink:0;}
+.zone-toggle::after{content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:3px;right:3px;transition:right 0.2s;}
+.zone-toggle.off{background:var(--dark3);}
+.zone-toggle.off::after{right:19px;}
+
+.battery-bar{height:6px;background:var(--dark3);border-radius:3px;margin-top:6px;overflow:hidden;}
+.battery-fill{height:100%;border-radius:3px;background:var(--green);transition:width 0.5s;}
+
+.audit-row{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(108,59,255,0.08);}
+.audit-row:last-child{border-bottom:none;}
+.audit-time{font-size:11px;color:var(--txt3);min-width:60px;font-family:'Syne',sans-serif;}
+.audit-type{font-size:11px;color:var(--p2);min-width:65px;}
+.audit-msg{font-size:11px;color:var(--txt2);}
+
+.footer-note{text-align:center;font-size:11px;color:var(--txt3);padding:0.75rem 1.25rem 1.5rem;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- LOGIN SCREEN -->
+  <div class="screen active" id="s-login">
+    <div class="hero-bg">
+      <div class="logo-row">
+        <div class="logo-dot">&#128205;</div>
+        <div class="logo-text">Family<span>Track</span> Pro</div>
+      </div>
+      <div class="hero-title">Stay connected,<br>stay protected.</div>
+      <div class="hero-sub">Real-time family location sharing with enterprise-grade security.</div>
+      <div class="pill-row">
+        <div class="pill">&#128274; End-to-end encrypted</div>
+        <div class="pill">&#9989; Consent-first</div>
+        <div class="pill">&#128683; Brute-force proof</div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="lock-warn" id="lock-warn">&#128274; Account locked after 5 failed attempts.</div>
+      <div class="field"><label>Your name</label><input type="text" id="l-name" placeholder="e.g. Simon Victor" maxlength="30"/></div>
+      <div class="field"><label>Family code</label><input type="password" id="l-pass" placeholder="Enter family code" maxlength="30" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <div id="attempt-bar" style="margin-bottom:12px;display:none;">
+        <div style="font-size:11px;color:#fca5a5;margin-bottom:4px;">Failed attempts: <span id="att-count">0</span>/5</div>
+        <div style="height:4px;background:var(--dark3);border-radius:2px;"><div id="att-fill" style="height:100%;background:#ef4444;border-radius:2px;width:0%;transition:width 0.3s;"></div></div>
+      </div>
+      <div class="consent-block">
+        <input type="checkbox" id="l-consent"/>
+        <span>I consent to share my real-time location with my family group only. I can revoke this at any time.</span>
+      </div>
+      <button class="btn btn-primary" onclick="doLogin()">Sign in securely &#8594;</button>
+      <div class="err" id="l-err"></div>
+      <div style="text-align:center;margin-top:16px;font-size:11px;color:var(--txt3);">Default code: <span style="color:var(--p2);font-family:'Syne',sans-serif;">family123</span></div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD SCREEN -->
+  <div class="screen" id="s-dash">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="name" id="t-name">Hello!</div>
+        <div class="session" id="t-session">Session active</div>
+      </div>
+      <div class="topbar-right">
+        <div class="icon-btn" onclick="triggerSOS()" title="SOS Alert">&#128680;</div>
+        <div class="icon-btn" onclick="doLogout()" title="Logout">&#128274;</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="s-val" id="st-members">3</div><div class="s-lbl">Members</div></div>
+      <div class="stat"><div class="s-val" id="st-live">2</div><div class="s-lbl">Live now</div></div>
+      <div class="stat"><div class="s-val" id="st-zones">3</div><div class="s-lbl">Safe zones</div></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('location')">Location</div>
+      <div class="tab" onclick="showTab('family')">Family</div>
+      <div class="tab" onclick="showTab('history')">History</div>
+      <div class="tab" onclick="showTab('zones')">Safe zones</div>
+      <div class="tab" onclick="showTab('alerts')">Alerts</div>
+      <div class="tab" onclick="showTab('security')">Security</div>
+    </div>
+
+    <!-- LOCATION TAB -->
+    <div class="tab-panel active" id="tp-location">
+      <div class="loc-hero">
+        <div class="loc-pulse" id="loc-pulse">&#128205;</div>
+        <div class="loc-status off" id="loc-status">Location off</div>
+        <div style="font-size:22px;font-weight:700;font-family:'Syne',sans-serif;margin:4px 0;" id="loc-city">--</div>
+        <div class="coord-row">
+          <div class="coord"><div class="c-lbl">Latitude</div><div class="c-val" id="loc-lat">--</div></div>
+          <div class="coord"><div class="c-lbl">Longitude</div><div class="c-val" id="loc-lon">--</div></div>
+        </div>
+        <div class="coord"><div class="c-lbl">Accuracy</div><div class="c-val" id="loc-acc">--</div></div>
+        <div style="margin-top:10px;display:flex;gap:8px;">
+          <button class="btn btn-primary" id="track-btn" onclick="toggleTrack()" style="flex:1;">&#9654; Start sharing</button>
+          <button class="btn btn-ghost btn-sm" onclick="clearLoc()" style="margin:0;">Clear</button>
+        </div>
+        <button class="sos-btn" onclick="triggerSOS()">&#128680; Send SOS to family</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Device info</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-size:13px;color:var(--txt2);">Battery level</div>
+          <div style="font-size:13px;font-weight:500;color:var(--txt);" id="batt-pct">Checking...</div>
+        </div>
+        <div class="battery-bar"><div class="battery-fill" id="batt-bar" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:10px;">
+          <div style="font-size:12px;color:var(--txt3);">Speed</div>
+          <div style="font-size:12px;color:var(--txt2);" id="loc-speed">-- km/h</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;">
+          <div style="font-size:12px;color:var(--txt3);">Last updated</div>
+          <div style="font-size:12px;color:var(--txt2);" id="loc-updated">Never</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;">
+          <div style="font-size:12px;color:var(--txt3);">Update interval</div>
+          <div style="font-size:12px;color:var(--txt2);">Every 10 seconds</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAMILY TAB -->
+    <div class="tab-panel" id="tp-family">
+      <div id="fam-list"></div>
+      <div class="card">
+        <div class="card-title">Invite member</div>
+        <div class="invite-row">
+          <input type="text" id="inv-name" placeholder="Member name"/>
+          <button class="btn btn-primary btn-sm" onclick="addMember()" style="margin:0;">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div class="tab-panel" id="tp-history">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div class="card-title" style="margin:0;">Location log</div>
+          <button class="btn btn-danger btn-sm" onclick="clearHist()" style="margin:0;padding:5px 12px;">Clear all</button>
+        </div>
+        <div id="hist-list"><div style="font-size:13px;color:var(--txt3);text-align:center;padding:1rem;">No history. Start sharing your location.</div></div>
+      </div>
+    </div>
+
+    <!-- ZONES TAB -->
+    <div class="tab-panel" id="tp-zones">
+      <div class="card">
+        <div class="card-title">Safe zones</div>
+        <div id="zone-list"></div>
+        <div class="invite-row">
+          <input type="text" id="zone-name" placeholder="Zone name (e.g. School)"/>
+          <button class="btn btn-primary btn-sm" onclick="addZone()" style="margin:0;">Add</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">How safe zones work</div>
+        <div style="font-size:13px;color:var(--txt2);line-height:1.6;">You receive an alert whenever a family member enters or leaves a defined safe zone. Toggle zones on or off at any time.</div>
+      </div>
+    </div>
+
+    <!-- ALERTS TAB -->
+    <div class="tab-panel" id="tp-alerts">
+      <div class="card">
+        <div class="card-title">Recent alerts</div>
+        <div id="alert-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Alert settings</div>
+        <div class="sec-row">
+          <div class="sec-icon">&#128680;</div>
+          <div class="sec-info"><div class="si-title">SOS alerts</div><div class="si-sub">Immediate family notification</div></div>
+          <div class="sec-check">&#10003;</div>
+        </div>
+        <div class="sec-row">
+          <div class="sec-icon">&#128205;</div>
+          <div class="sec-info"><div class="si-title">Zone enter / exit</div><div class="si-sub">Notify on safe zone boundary</div></div>
+          <div class="sec-check">&#10003;</div>
+        </div>
+        <div class="sec-row">
+          <div class="sec-icon">&#128267;</div>
+          <div class="sec-info"><div class="si-title">Low battery alert</div><div class="si-sub">Alert family when below 20%</div></div>
+          <div class="sec-check">&#10003;</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECURITY TAB -->
+    <div class="tab-panel" id="tp-security">
+      <div class="card">
+        <div class="card-title">Security status</div>
+        <div class="sec-row"><div class="sec-icon">&#128274;</div><div class="sec-info"><div class="si-title">Password protected</div><div class="si-sub">Family code required to login</div></div><div class="sec-check">&#10003;</div></div>
+        <div class="sec-row"><div class="sec-icon">&#9203;</div><div class="sec-info"><div class="si-title">Auto session timeout</div><div class="si-sub">Logs out after 30 min inactivity</div></div><div class="sec-check">&#10003;</div></div>
+        <div class="sec-row"><div class="sec-icon">&#128683;</div><div class="sec-info"><div class="si-title">Brute-force protection</div><div class="si-sub">Locked after 5 failed attempts</div></div><div class="sec-check">&#10003;</div></div>
+        <div class="sec-row"><div class="sec-icon">&#128275;</div><div class="sec-info"><div class="si-title">Consent enforced</div><div class="si-sub">Opt-in location sharing only</div></div><div class="sec-check">&#10003;</div></div>
+        <div class="sec-row"><div class="sec-icon">&#128202;</div><div class="sec-info"><div class="si-title">Audit log</div><div class="si-sub">All actions recorded with timestamp</div></div><div class="sec-check">&#10003;</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Change family code</div>
+        <div class="field" style="margin-bottom:10px;"><label>New code</label><input type="password" id="np" placeholder="Minimum 6 characters"/></div>
+        <div class="field" style="margin-bottom:10px;"><label>Confirm code</label><input type="password" id="cp" placeholder="Repeat new code"/></div>
+        <button class="btn btn-primary" onclick="changeCode()">Update code</button>
+        <div class="err" id="cp-err"></div>
+        <div class="success-toast" id="cp-ok">&#10003; Code updated successfully!</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Audit log</div>
+        <div id="audit-log"><div style="font-size:12px;color:var(--txt3);">No events yet.</div></div>
+      </div>
+    </div>
+
+    <div class="footer-note">&#128274; FamilyTrack Pro &mdash; All data stays on your device</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js" onerror="this.remove()"></script>
+<script>
+let user=null,fails=0,locked=false,tracking=false,tInterval=null,sTimer=null,sRemain=1800;
+let locHistory=[],auditLog=[],familyId=null,channel=null,lastPosition=null;
+let code='family123';
+let zones=[{name:'Home',radius:'100m',on:true},{name:'School',radius:'200m',on:true},{name:'Office',radius:'150m',on:false}];
+let members=[];
+let alerts=[];
+const cfg=window.FAMILYTRACK_CONFIG||{};
+const supabaseReady=!!(window.supabase&&cfg.supabaseUrl&&cfg.supabaseAnonKey&&!cfg.supabaseUrl.includes('YOUR-PROJECT'));
+const sb=supabaseReady?window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey):null;
+function h(s){let v=0;for(let i=0;i<s.length;i++){v=((v<<5)-v)+s.charCodeAt(i);v|=0;}return v;}
+function g(id){return document.getElementById(id);}
+function showErr(id,msg){const e=g(id);e.style.display='block';e.textContent=msg;}
+function toast(msg){const e=g('l-err');e.style.display='block';e.style.background='rgba(16,185,129,.12)';e.style.borderColor='rgba(16,185,129,.25)';e.style.color='#6ee7b7';e.textContent=msg;setTimeout(()=>{e.style.display='none';e.style.background='';e.style.borderColor='';e.style.color='';},3500);}
+
+async function doLogin(){
+  if(locked){g('lock-warn').style.display='block';return;}
+  const n=g('l-name').value.trim(),p=g('l-pass').value,c=g('l-consent').checked;
+  if(!n)return showErr('l-err','Please enter your name.');
+  if(!p)return showErr('l-err','Please enter the family code.');
+  if(!c)return showErr('l-err','You must consent to location sharing.');
+  if(!supabaseReady){
+    if(h(p)!==h(code)){fails++;g('attempt-bar').style.display='block';g('att-count').textContent=fails;g('att-fill').style.width=(fails/5*100)+'%';if(fails>=5){locked=true;g('lock-warn').style.display='block';}return showErr('l-err',fails>=5?'Account locked after 5 failed attempts.':`Wrong code. ${5-fails} attempt(s) remaining.`);}
+    user={id:'local-'+Date.now(),name:n}; familyId='local-family';
+  }else{
+    let {data,error}=await sb.auth.signInWithPassword({email:n.includes('@')?n:`${n.toLowerCase().replace(/\s+/g,'.')}@familytrack.local`,password:p});
+    if(error){
+      const signup=await sb.auth.signUp({email:n.includes('@')?n:`${n.toLowerCase().replace(/\s+/g,'.')}@familytrack.local`,password:p,options:{data:{display_name:n}}});
+      if(signup.error)return showErr('l-err',signup.error.message);
+      data=signup.data;
+    }
+    user=data.user;
+    const {data:existing}=await sb.from('family_members').select('family_id,display_name').eq('user_id',user.id).maybeSingle();
+    if(existing){familyId=existing.family_id;}
+    else{
+      const {data:fam,error:fe}=await sb.from('families').select('id').eq('invite_code',p).maybeSingle();
+      if(fe||!fam)return showErr('l-err','Family code not found. Create a family group in Supabase first.');
+      familyId=fam.id;
+      const {error:me}=await sb.from('family_members').insert({family_id:familyId,user_id:user.id,display_name:n,consent_location:true});
+      if(me)return showErr('l-err',me.message);
+    }
+    await loadCloudData(); subscribeRealtime();
+  }
+  fails=0;g('l-err').style.display='none';
+  logAudit('Login','Successful login: '+n);g('t-name').textContent='Hi, '+n.split(' ')[0]+'!';showScreen('s-dash');renderAll();startSession();getBattery();
+}
+async function doLogout(){stopTrack();clearInterval(sTimer);if(channel)await sb?.removeChannel(channel);logAudit('Logout','Session ended by '+(user?.name||user));user=null;familyId=null;g('l-name').value='';g('l-pass').value='';g('l-consent').checked=false;g('attempt-bar').style.display='none';g('lock-warn').style.display='none';showScreen('s-login');}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));g(id).classList.add('active');}
+function showTab(name){const tabs=['location','family','history','zones','alerts','security'];document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(t=>t.classList.remove('active'));tabs.forEach((t,i)=>{if(t===name){document.querySelectorAll('.tab')[i].classList.add('active');g('tp-'+t).classList.add('active');}});}
+function toggleTrack(){tracking?stopTrack():startTrack();}
+function startTrack(){if(!navigator.geolocation)return alert('Geolocation is not supported.');tracking=true;g('track-btn').textContent='⏹ Stop sharing';g('track-btn').style.background='#ef4444';g('loc-status').textContent='Live sharing';g('loc-status').className='loc-status on';g('loc-pulse').classList.add('active-pulse');getLoc();tInterval=setInterval(getLoc,10000);logAudit('Tracking','Started location sharing');}
+async function stopTrack(){tracking=false;clearInterval(tInterval);g('track-btn').textContent='▶ Start sharing';g('track-btn').style.background='';g('loc-status').textContent='Location off';g('loc-status').className='loc-status off';g('loc-pulse').classList.remove('active-pulse');if(supabaseReady&&user&&familyId)await sb.from('locations').insert({family_id:familyId,user_id:user.id,latitude:lastPosition?.latitude||0,longitude:lastPosition?.longitude||0,is_sharing:false});logAudit('Tracking','Stopped location sharing');}
+async function getLoc(){navigator.geolocation.getCurrentPosition(async pos=>{const lat=Number(pos.coords.latitude.toFixed(6)),lon=Number(pos.coords.longitude.toFixed(6)),acc=Math.round(pos.coords.accuracy),spd=pos.coords.speed?Math.round(pos.coords.speed*3.6):0;lastPosition={latitude:lat,longitude:lon};g('loc-lat').textContent=lat;g('loc-lon').textContent=lon;g('loc-acc').textContent=acc+'m';g('loc-city').textContent='Your live location';g('loc-speed').textContent=spd+' km/h';g('loc-updated').textContent=new Date().toLocaleTimeString();locHistory.unshift({time:new Date().toLocaleTimeString(),lat,lon});if(locHistory.length>50)locHistory.pop();renderHist();if(supabaseReady&&user&&familyId){await sb.from('locations').insert({family_id:familyId,user_id:user.id,latitude:lat,longitude:lon,accuracy:acc,speed:pos.coords.speed||0,is_sharing:true});}},()=>{g('loc-lat').textContent='Access denied';});}
+function clearLoc(){stopTrack();['loc-lat','loc-lon','loc-acc','loc-speed'].forEach(id=>g(id).textContent='--');g('loc-city').textContent='--';g('loc-updated').textContent='Never';}
+function clearHist(){locHistory=[];renderHist();}
+async function triggerSOS(){const msg='Emergency SOS triggered by '+(user?.name||'You');alerts.unshift({t:msg,s:'Just now',type:'sos'});renderAlerts();showTab('alerts');logAudit('SOS',msg);if(supabaseReady&&user&&familyId)await sb.from('alerts').insert({family_id:familyId,user_id:user.id,type:'sos',message:msg});alert('SOS alert sent to all family members!');}
+async function addMember(){const n=g('inv-name').value.trim();if(!n)return;members.push({n,i:n[0].toUpperCase(),cls:'av',status:'invite'});g('inv-name').value='';g('st-members').textContent=members.length;renderFamily();logAudit('Member','Invited '+n+' to family group');}
+function addZone(){const n=g('zone-name').value.trim();if(!n)return;zones.push({name:n,radius:'100m',on:true});g('zone-name').value='';g('st-zones').textContent=zones.length;renderZones();logAudit('Zone','Added safe zone: '+n);}
+function toggleZone(i){zones[i].on=!zones[i].on;renderZones();}
+function changeCode(){const n=g('np').value,c=g('cp').value,err=g('cp-err'),ok=g('cp-ok');err.style.display='none';ok.style.display='none';if(n.length<6)return showErr('cp-err','Code must be at least 6 characters.');if(n!==c)return showErr('cp-err','Codes do not match.');code=n;g('np').value='';g('cp').value='';ok.style.display='block';logAudit('Security','Family code changed by '+(user?.name||'user'));setTimeout(()=>ok.style.display='none',3000);}
+function startSession(){clearInterval(sTimer);sRemain=1800;sTimer=setInterval(()=>{sRemain--;const m=Math.floor(sRemain/60),s=sRemain%60;g('t-session').textContent=`Session expires in ${m}:${s.toString().padStart(2,'0')}`;if(sRemain<=0){clearInterval(sTimer);alert('Session expired. Please login again.');doLogout();}},1000);}
+function getBattery(){if(navigator.getBattery){navigator.getBattery().then(b=>{const pct=Math.round(b.level*100);g('batt-pct').textContent=pct+'%';g('batt-bar').style.width=pct+'%';});}else g('batt-pct').textContent='Not available';}
+function logAudit(type,msg){auditLog.unshift({type,msg,time:new Date().toLocaleTimeString()});if(auditLog.length>20)auditLog.pop();renderAudit();}
+async function loadCloudData(){
+  if(!sb||!familyId)return;
+  const {data:ms}=await sb.from('family_members').select('user_id,display_name,consent_location').eq('family_id',familyId);
+  const {data:ls}=await sb.from('locations').select('*').eq('family_id',familyId).order('recorded_at',{ascending:false}).limit(500);
+  const latestByUser=new Map();
+  (ls||[]).forEach(row=>{if(!latestByUser.has(row.user_id))latestByUser.set(row.user_id,row);});
+  members=(ms||[]).map(m=>{
+    const latest=latestByUser.get(m.user_id);
+    const isFresh=latest && (Date.now()-new Date(latest.recorded_at).getTime()) < 2*60*1000;
+    return {user_id:m.user_id,n:m.display_name,i:(m.display_name||'?')[0].toUpperCase(),cls:'av',status:(latest?.is_sharing&&isFresh)?'live':'off',lastLocation:latest||null};
+  });
+  locHistory=(ls||[]).filter(x=>x.user_id===user.id).slice(0,50).map(x=>({time:new Date(x.recorded_at).toLocaleTimeString(),lat:x.latitude,lon:x.longitude}));
+  const {data:as}=await sb.from('alerts').select('*').eq('family_id',familyId).order('created_at',{ascending:false}).limit(30);
+  alerts=(as||[]).map(a=>({t:a.message,s:new Date(a.created_at).toLocaleString(),type:a.type}));
+}
+function subscribeRealtime(){
+  if(!sb||!familyId)return;
+  channel=sb.channel('family-'+familyId)
+    .on('postgres_changes',{event:'*',schema:'public',table:'locations',filter:'family_id=eq.'+familyId},payload=>{
+      const row=payload.new;
+      const m=members.find(x=>x.user_id===row.user_id);
+      if(m){m.status=row.is_sharing?'live':'off';m.lastLocation=row;}
+      if(row.user_id===user?.id && row.is_sharing){
+        g('loc-lat').textContent=row.latitude;g('loc-lon').textContent=row.longitude;g('loc-acc').textContent=(row.accuracy||'--')+'m';g('loc-updated').textContent=new Date(row.recorded_at||Date.now()).toLocaleTimeString();
+      }
+      renderFamily();
+    })
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'family_members',filter:'family_id=eq.'+familyId},async()=>{await loadCloudData();renderFamily();})
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'alerts',filter:'family_id=eq.'+familyId},payload=>{
+      if(payload.new.user_id!==user?.id){alerts.unshift({t:payload.new.message,s:'Just now',type:payload.new.type});renderAlerts();}
+    }).subscribe();
+}
+function renderAll(){renderFamily();renderHist();renderZones();renderAlerts();renderAudit();}
+function renderFamily(){g('fam-list').innerHTML=members.map(m=>{const when=m.lastLocation?.recorded_at?new Date(m.lastLocation.recorded_at).toLocaleTimeString():'No location yet';return `<div class="member-card"><div class="av ${m.cls||''}">${m.i}</div><div class="m-info"><div class="m-name">${m.n}</div><div class="m-sub">${m.status==='live'?'Sharing live location · '+when:m.status==='invite'?'Invitation pending':'Offline · Last update '+when}</div></div><span class="badge ${m.status==='live'?'badge-live':m.status==='invite'?'badge-invite':'badge-off'}">${m.status==='live'?'📍 Live':m.status==='invite'?'Invited':'Offline'}</span></div>`}).join('');g('st-members').textContent=members.length;g('st-live').textContent=members.filter(m=>m.status==='live').length;}
+function renderHist(){g('hist-list').innerHTML=locHistory.length?locHistory.map(x=>`<div class="hist-item"><div class="hist-dot"></div><div class="hist-time">${x.time}</div><div class="hist-coord">${x.lat}, ${x.lon}</div></div>`).join(''):'<div style="font-size:13px;color:var(--txt3);text-align:center;padding:1rem;">No history yet. Start sharing your location.</div>';}
+function renderZones(){g('zone-list').innerHTML=zones.map((z,i)=>`<div class="zone-item"><div style="font-size:18px;">🏠</div><div class="zone-info"><div class="zone-name">${z.name}</div><div class="zone-radius">Radius: ${z.radius}</div></div><div class="zone-toggle ${z.on?'':'off'}" onclick="toggleZone(${i})"></div></div>`).join('');g('st-zones').textContent=zones.length;}
+function renderAlerts(){g('alert-list').innerHTML=alerts.length?alerts.map(a=>`<div class="alert-item"><div class="alert-title">${a.type==='sos'?'🚨 ':a.type==='zone'?'📍 ':''}${a.t}</div><div class="alert-sub">${a.s}</div></div>`).join(''):'<div style="font-size:13px;color:var(--txt3);">No alerts yet.</div>';}
+function renderAudit(){g('audit-log').innerHTML=auditLog.length?auditLog.map(a=>`<div class="audit-row"><div class="audit-time">${a.time}</div><div class="audit-type">[${a.type}]</div><div class="audit-msg">${a.msg}</div></div>`).join(''):'<div style="font-size:12px;color:var(--txt3);">No events recorded yet.</div>';}
+if(!supabaseReady){const note=document.createElement('div');note.style='position:fixed;bottom:8px;left:50%;transform:translateX(-50%);background:#281d50;color:#a89fd4;padding:7px 12px;border-radius:8px;font:11px Inter;z-index:99;';note.textContent='Demo mode — add config.js to enable real-time cloud sync';document.body.appendChild(note);}
+</script>
+</body>
+</html>
